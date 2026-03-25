@@ -13,6 +13,7 @@ import {
 } from './js/render-functions';
 
 const searchForm = document.querySelector('.form');
+const galleryVisibility = document.querySelector('.gallery-list');
 
 searchForm.addEventListener('submit', event => {
   event.preventDefault();
@@ -31,7 +32,6 @@ searchForm.addEventListener('submit', event => {
   }
 
   clearGallery();
-  showLoader();
 
   getImagesByQuery(userSearchText)
     .then(data => {
@@ -46,30 +46,38 @@ searchForm.addEventListener('submit', event => {
           iconColor: '#fff',
         });
       } else {
+        showLoader();
+        galleryVisibility.style.display = 'none';
         createGallery(data.data.hits);
 
         const allImages = document.querySelectorAll('.gallery-image');
 
-        // TODO part
         const allPromises = Array.from(allImages).map(img => {
-          return new Promise((resolve, reject) => {});
+          return new Promise((resolve, rejected) => {
+            img.addEventListener('load', () => {
+              resolve(img);
+            });
+
+            img.addEventListener('error', () => {
+              resolve(img);
+            });
+          });
         });
 
-        Promise.allSettled(allPromises).then();
+        Promise.allSettled(allPromises).then(() => {
+          hideLoader();
+          galleryVisibility.style.display = 'flex';
 
-        // TODO
-
-        new SimpleLightbox('.gallery-link', {
-          overlayOpacity: 0.8,
-          captionDelay: 250,
-          captionsData: 'alt',
-        }).refresh();
+          new SimpleLightbox('.gallery-link', {
+            overlayOpacity: 0.8,
+            captionDelay: 250,
+            captionsData: 'alt',
+          }).refresh();
+        });
       }
     })
     .catch(error => console.log(error))
     .finally(() => {
-      hideLoader();
-
       searchForm.reset();
     });
 });

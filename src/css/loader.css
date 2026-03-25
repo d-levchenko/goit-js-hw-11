@@ -1,5 +1,6 @@
 .loader {
-  margin: 30px auto 0;
+  display: flex;
+  margin: 90px auto 0;
   color: black;
   font-size: 10px;
   width: 1em;
@@ -9,7 +10,6 @@
   text-indent: -9999em;
   animation: mulShdSpin 1.3s infinite linear;
   transform: translateZ(0);
-  opacity: 1;
 }
 
 @keyframes mulShdSpin {
@@ -105,5 +105,5 @@
 }
 
 .is-hidden {
-  opacity: 0;
+  display: none;
 }
