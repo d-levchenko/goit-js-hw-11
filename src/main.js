@@ -73,7 +73,10 @@ searchForm.addEventListener('submit', event => {
         });
       }
     })
-    .catch(error => console.log(error))
+    .catch(error => {
+      console.log(error.message);
+      return Promise.reject(error);
+    })
     .finally(() => {
       searchForm.reset();
     });
