@@ -13,7 +13,6 @@ import {
 } from './js/render-functions';
 
 const searchForm = document.querySelector('.form');
-const galleryVisibility = document.querySelector('.gallery-list');
 
 searchForm.addEventListener('submit', event => {
   event.preventDefault();
@@ -47,7 +46,6 @@ searchForm.addEventListener('submit', event => {
         });
       } else {
         showLoader();
-        galleryVisibility.style.display = 'none';
         createGallery(data.data.hits);
 
         const allImages = document.querySelectorAll('.gallery-image');
@@ -66,7 +64,6 @@ searchForm.addEventListener('submit', event => {
 
         Promise.allSettled(allPromises).then(() => {
           hideLoader();
-          galleryVisibility.style.display = 'flex';
 
           new SimpleLightbox('.gallery-link', {
             overlayOpacity: 0.8,

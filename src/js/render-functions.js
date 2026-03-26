@@ -37,9 +37,11 @@ export function clearGallery() {
 const loader = document.querySelector('.loader');
 
 export function showLoader() {
+  galleryList.style.display = 'none';
   loader.classList.remove('is-hidden');
 }
 
 export function hideLoader() {
   loader.classList.add('is-hidden');
+  galleryList.style.display = 'flex';
 }
