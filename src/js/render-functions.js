@@ -1,4 +1,4 @@
-const galleryList = document.querySelector('.gallery-list');
+const galleryList = document.querySelector('.gallery');
 
 export function createGallery(images) {
   const markup = images
