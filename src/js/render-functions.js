@@ -41,8 +41,6 @@ export function createSimplelightbox(className) {
     captionDelay: 250,
     captionsData: 'alt',
   });
-
-  return lightboxRefresh;
 }
 
 export function refreshLightbox() {
