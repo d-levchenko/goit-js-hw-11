@@ -15,7 +15,16 @@ export function getImagesByQuery(query) {
       },
     })
     .then(response => response.data)
-    .catch(error => console.log(error));
+    .catch(() => {
+      iziToast.show({
+        message: 'There is an error loading data from the server.',
+        messageColor: '#fff',
+        backgroundColor: '#ef4040',
+        position: 'topRight',
+        icon: 'bi bi-x-octagon',
+        iconColor: '#fff',
+      });
+    });
 
   return promise;
 }
