@@ -33,12 +33,20 @@ export function createGallery(images) {
   galleryList.insertAdjacentHTML('afterbegin', markup);
 }
 
+let lightboxRefresh;
+
 export function createSimplelightbox(className) {
-  new SimpleLightbox(`${className}`, {
+  lightboxRefresh = new SimpleLightbox(`${className}`, {
     overlayOpacity: 0.8,
     captionDelay: 250,
     captionsData: 'alt',
-  }).refresh();
+  });
+
+  return lightboxRefresh;
+}
+
+export function refreshLightbox() {
+  lightboxRefresh.refresh();
 }
 
 export function clearGallery() {

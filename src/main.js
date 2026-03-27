@@ -8,6 +8,7 @@ import {
   createSimplelightbox,
   showLoader,
   hideLoader,
+  refreshLightbox,
 } from './js/render-functions';
 
 const searchForm = document.querySelector('.form');
@@ -62,7 +63,9 @@ searchForm.addEventListener('submit', event => {
 
         Promise.allSettled(allPromises).then(() => {
           hideLoader();
+
           createSimplelightbox('.gallery-link');
+          refreshLightbox();
         });
       }
     })
