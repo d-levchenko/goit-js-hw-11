@@ -1,6 +1,3 @@
-import SimpleLightbox from 'simplelightbox';
-import 'simplelightbox/dist/simple-lightbox.min.css';
-
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
@@ -8,6 +5,7 @@ import { getImagesByQuery } from './js/pixabay-api';
 import {
   createGallery,
   clearGallery,
+  createSimplelightbox,
   showLoader,
   hideLoader,
 } from './js/render-functions';
@@ -31,10 +29,11 @@ searchForm.addEventListener('submit', event => {
   }
 
   clearGallery();
+  showLoader();
 
   getImagesByQuery(userSearchText)
     .then(data => {
-      if (data.data.hits.length === 0) {
+      if (data.hits.length === 0) {
         iziToast.show({
           message:
             'Sorry, there are no images matching your search query. Please try again!',
@@ -45,8 +44,7 @@ searchForm.addEventListener('submit', event => {
           iconColor: '#fff',
         });
       } else {
-        showLoader();
-        createGallery(data.data.hits);
+        createGallery(data.hits);
 
         const allImages = document.querySelectorAll('.gallery-image');
 
@@ -64,18 +62,21 @@ searchForm.addEventListener('submit', event => {
 
         Promise.allSettled(allPromises).then(() => {
           hideLoader();
-
-          new SimpleLightbox('.gallery-link', {
-            overlayOpacity: 0.8,
-            captionDelay: 250,
-            captionsData: 'alt',
-          }).refresh();
+          createSimplelightbox('.gallery-link');
         });
       }
     })
-    .catch(error => {
-      console.log(error.message);
-      return Promise.reject(error);
+    .catch(() => {
+      hideLoader();
+
+      iziToast.show({
+        message: 'Failed to load image. Please, try again!',
+        messageColor: '#fff',
+        backgroundColor: '#ef4040',
+        position: 'topRight',
+        icon: 'bi bi-x-octagon',
+        iconColor: '#fff',
+      });
     })
     .finally(() => {
       searchForm.reset();

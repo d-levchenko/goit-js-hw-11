@@ -1,3 +1,6 @@
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
 const galleryList = document.querySelector('.gallery');
 
 export function createGallery(images) {
@@ -28,6 +31,14 @@ export function createGallery(images) {
     .join('');
 
   galleryList.insertAdjacentHTML('afterbegin', markup);
+}
+
+export function createSimplelightbox(className) {
+  new SimpleLightbox(`${className}`, {
+    overlayOpacity: 0.8,
+    captionDelay: 250,
+    captionsData: 'alt',
+  }).refresh();
 }
 
 export function clearGallery() {
