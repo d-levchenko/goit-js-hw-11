@@ -1,11 +1,27 @@
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+
 const galleryList = document.querySelector('.gallery');
 
-export function createGallery(images) {
+export const createGallery = images => {
+  // TODO check if images is undefined or null
+  if (images === undefined || images === null) {
+    iziToast.show({
+      message: 'Sorry, we cannot resolve your search request!',
+      messageColor: '#fff',
+      backgroundColor: '#ef4040',
+      position: 'topRight',
+      icon: 'bi bi-x-octagon',
+      iconColor: '#fff',
+    });
+    return;
+  }
+
   const markup = images
-    ?.map(image => {
+    .map(image => {
       const {
         webformatURL,
         largeImageURL,
@@ -31,34 +47,50 @@ export function createGallery(images) {
     .join('');
 
   galleryList.insertAdjacentHTML('afterbegin', markup);
-}
+};
 
-let lightboxRefresh;
-
-export function createSimplelightbox(className) {
-  lightboxRefresh = new SimpleLightbox(`${className}`, {
+export const createSimplelightbox = className => {
+  new SimpleLightbox(`${className}`, {
     overlayOpacity: 0.8,
     captionDelay: 250,
     captionsData: 'alt',
-  });
-}
+  }).refresh();
+};
 
-export function refreshLightbox() {
-  lightboxRefresh.refresh();
-}
-
-export function clearGallery() {
+export const clearGallery = () => {
   galleryList.innerHTML = '';
-}
+};
 
 const loader = document.querySelector('.loader');
 
-export function showLoader() {
+export const showLoader = () => {
   galleryList.style.display = 'none';
   loader.classList.remove('is-hidden');
-}
+};
 
-export function hideLoader() {
+export const hideLoader = () => {
   loader.classList.add('is-hidden');
   galleryList.style.display = 'flex';
-}
+};
+
+export const imagePromisesLoading = () => {
+  const allImages = document.querySelectorAll('.gallery-image');
+
+  const allPromises = Array.from(allImages).map(img => {
+    return new Promise((resolve, reject) => {
+      img.addEventListener('load', () => {
+        resolve(img);
+      });
+
+      img.addEventListener('error', () => {
+        resolve(img);
+      });
+    });
+  });
+
+  Promise.allSettled(allPromises).then(() => {
+    hideLoader();
+
+    createSimplelightbox('.gallery-link');
+  });
+};

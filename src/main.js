@@ -8,7 +8,7 @@ import {
   createSimplelightbox,
   showLoader,
   hideLoader,
-  refreshLightbox,
+  imagePromisesLoading,
 } from './js/render-functions';
 
 const searchForm = document.querySelector('.form');
@@ -35,6 +35,8 @@ searchForm.addEventListener('submit', event => {
   getImagesByQuery(userSearchText)
     .then(data => {
       if (data.hits.length === 0) {
+        hideLoader();
+
         iziToast.show({
           message:
             'Sorry, there are no images matching your search query. Please try again!',
@@ -46,27 +48,7 @@ searchForm.addEventListener('submit', event => {
         });
       } else {
         createGallery(data.hits);
-
-        const allImages = document.querySelectorAll('.gallery-image');
-
-        const allPromises = Array.from(allImages).map(img => {
-          return new Promise((resolve, rejected) => {
-            img.addEventListener('load', () => {
-              resolve(img);
-            });
-
-            img.addEventListener('error', () => {
-              resolve(img);
-            });
-          });
-        });
-
-        Promise.allSettled(allPromises).then(() => {
-          hideLoader();
-
-          createSimplelightbox('.gallery-link');
-          refreshLightbox();
-        });
+        imagePromisesLoading();
       }
     })
     .catch(() => {
