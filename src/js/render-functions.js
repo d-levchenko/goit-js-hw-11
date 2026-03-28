@@ -7,7 +7,6 @@ import 'izitoast/dist/css/iziToast.min.css';
 const galleryList = document.querySelector('.gallery');
 
 export const createGallery = images => {
-  // TODO check if images is undefined or null
   if (images === undefined || images === null) {
     iziToast.show({
       message: 'Sorry, we cannot resolve your search request!',
@@ -21,8 +20,8 @@ export const createGallery = images => {
   }
 
   const markup = images
-    .map(image => {
-      const {
+    .map(
+      ({
         webformatURL,
         largeImageURL,
         tags,
@@ -30,9 +29,7 @@ export const createGallery = images => {
         views,
         comments,
         downloads,
-      } = image;
-
-      return `<li class='gallery-item'>
+      }) => `<li class='gallery-item'>
         <a class='gallery-link' href='${largeImageURL}'>
           <img class='gallery-image' src='${webformatURL}' alt='${tags}'>
         </a>
@@ -42,20 +39,18 @@ export const createGallery = images => {
           <p class='image-text-info'>Comments <span class='additional-text-info'>${comments}</span></p>
           <p class='image-text-info'>Downloads <span class='additional-text-info'>${downloads}</span></p>
         </div>
-      </li>`;
-    })
+      </li>`,
+    )
     .join('');
 
   galleryList.insertAdjacentHTML('afterbegin', markup);
 };
 
-export const createSimplelightbox = className => {
-  new SimpleLightbox(`${className}`, {
-    overlayOpacity: 0.8,
-    captionDelay: 250,
-    captionsData: 'alt',
-  }).refresh();
-};
+export let lightbox = new SimpleLightbox('.gallery-link', {
+  overlayOpacity: 0.8,
+  captionDelay: 250,
+  captionsData: 'alt',
+});
 
 export const clearGallery = () => {
   galleryList.innerHTML = '';
@@ -90,7 +85,5 @@ export const imagePromisesLoading = () => {
 
   Promise.allSettled(allPromises).then(() => {
     hideLoader();
-
-    createSimplelightbox('.gallery-link');
   });
 };

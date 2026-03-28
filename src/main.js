@@ -5,10 +5,10 @@ import { getImagesByQuery } from './js/pixabay-api';
 import {
   createGallery,
   clearGallery,
-  createSimplelightbox,
   showLoader,
   hideLoader,
   imagePromisesLoading,
+  lightbox,
 } from './js/render-functions';
 
 const searchForm = document.querySelector('.form');
@@ -48,6 +48,7 @@ searchForm.addEventListener('submit', event => {
         });
       } else {
         createGallery(data.hits);
+        lightbox.refresh();
         imagePromisesLoading();
       }
     })

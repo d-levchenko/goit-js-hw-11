@@ -6,7 +6,7 @@ const myAPI_Key = '55171799-755350edf6c0ed064d9a514af';
 const defaultURL = (axios.defaults.baseURL = 'https://pixabay.com/api/');
 
 export const getImagesByQuery = query => {
-  const promise = axios
+  return axios
     .get(defaultURL, {
       params: {
         key: `${myAPI_Key}`,
@@ -27,6 +27,4 @@ export const getImagesByQuery = query => {
         iconColor: '#fff',
       });
     });
-
-  return promise;
 };
